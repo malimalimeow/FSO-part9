@@ -1,5 +1,3 @@
-import { argv } from "node:process";
-
 interface ExerciseData {
     exercise:number[];
     target:number
