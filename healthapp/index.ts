@@ -34,8 +34,9 @@ app.post('/exercises',(req,res)=>{
         const exerciseData=data.map(d=>Number(d));
         const hasNan = exerciseData.some(e=>isNaN(e));
         if (hasNan||(isNaN(Number(target)))){ throw new Error("malformatted parameters");}
-    
-        const result = exerciseCalculate(daily_exercises!,target!);
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        const result = exerciseCalculate(daily_exercises,target);
         res.json(result);     
     }catch(error:unknown){
     let errorMessage = `Something bad happened`;
