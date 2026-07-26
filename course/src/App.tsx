@@ -1,3 +1,4 @@
+//interface
 interface HeaderProps {
   courseName: string;
 }
@@ -29,43 +30,33 @@ interface CoursePartBackground extends CoursePartBase {
   backgroundMaterial: string;
   kind: "background";
 }
+interface CoursePartSpecial extends CoursePartBase {
+  requirements: string[];
+  kind: "special";
+}
 
-type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+type CoursePart =
+  | CoursePartBasic
+  | CoursePartGroup
+  | CoursePartBackground
+  | CoursePartSpecial;
 
+//helper function
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`,
+  );
+};
+
+//components
 const Header = ({ courseName }: HeaderProps) => <h1>{courseName}</h1>;
 
 const Content = ({ courseParts }: ContentProps) =>
   courseParts.map((part) => <Part key={part.name} part={part} />);
 
 const Part = ({ part }: PartProps) => {
-  const assertNever = (value: never): never => {
-    throw new Error(
-      `Unhandled discriminated union member: ${JSON.stringify(value)}`,
-    );
-  };
-
   switch (part.kind) {
     case "basic":
-      return (
-        <div>
-          <strong>
-            {part.name} {part.exerciseCount}
-          </strong>
-          <p>{part.description}</p>{" "}
-        </div>
-      );
-      break;
-    case "group":
-      return (
-        <div>
-          <strong>
-            {part.name} {part.exerciseCount}
-          </strong>
-          <p>project counts {part.groupProjectCount} </p>
-        </div>
-      );
-      break;
-    case "background":
       return (
         <div>
           <strong>
@@ -74,7 +65,42 @@ const Part = ({ part }: PartProps) => {
           <p>{part.description}</p>
         </div>
       );
-      break;
+
+    case "group":
+      return (
+        <div>
+          <strong>
+            {part.name} {part.exerciseCount}
+          </strong>
+          <p>Project Counts: {part.groupProjectCount} </p>
+        </div>
+      );
+
+    case "background":
+      return (
+        <div>
+          <strong>
+            {part.name} {part.exerciseCount}
+          </strong>
+          <p>{part.description}</p>
+          <p>Background Material: {part.backgroundMaterial}</p>
+        </div>
+      );
+
+    case "special":
+      return (
+        <div>
+          <strong>
+            {part.name} {part.exerciseCount}
+          </strong>
+          <p>{part.description}</p>
+          Requirements:
+          {part.requirements.map((r: string, i: number) => (
+            <span key={i}> {r}</span>
+          ))}
+        </div>
+      );
+
     default:
       return assertNever(part);
   }
@@ -89,6 +115,7 @@ const Total = ({ courseParts }: ContentProps) => {
   return <p>Number of exercises {totalExercises}</p>;
 };
 
+//everything.
 const App = () => {
   const courseName = "Half Stack application development";
   const courseParts: CoursePart[] = [
@@ -123,6 +150,13 @@ const App = () => {
       exerciseCount: 10,
       description: "a hard part",
       kind: "basic",
+    },
+    {
+      name: "Backend development",
+      exerciseCount: 21,
+      description: "Typing the backend",
+      requirements: ["nodejs", "jest"],
+      kind: "special",
     },
   ];
 
