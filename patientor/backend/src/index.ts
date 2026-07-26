@@ -4,6 +4,7 @@ import diagnosesRouter from './routes/diagnoses.ts';
 import patientRouter from './routes/patients.ts';
 
 
+
 const app = express();
 app.use(express.json());
 app.use(cors())
