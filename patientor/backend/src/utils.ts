@@ -7,10 +7,10 @@ export const NewPatientSchema= z.object({
         dateOfBirth: z.iso.date(),
         ssn: z.string(),
         gender: z.enum(Gender),
-        occupation:z.string()})
+        occupation:z.string()});
 
 
  export const parseNewPatient = (object:unknown):NewPatient=>{
-   return NewPatientSchema.parse(object);}
+   return NewPatientSchema.parse(object);};
 
 
