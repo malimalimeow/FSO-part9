@@ -23,15 +23,9 @@ interface Props {
   patients: Patient[];
   setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
   getOnePatient: (id: string) => Promise<void>;
-  setShowPatient: React.Dispatch<React.SetStateAction<Patient>>;
 }
 
-const PatientListPage = ({
-  patients,
-  setPatients,
-  getOnePatient,
-  setShowPatient,
-}: Props) => {
+const PatientListPage = ({ patients, setPatients, getOnePatient }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 
@@ -67,8 +61,7 @@ const PatientListPage = ({
   };
 
   const findPatientData = async (id: string) => {
-    const data = await getOnePatient(id);
-    console.log(data);
+    await getOnePatient(id);
   };
 
   return (

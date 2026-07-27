@@ -4,24 +4,14 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Button, Divider, Container, Typography } from "@mui/material";
 
 import { apiBaseUrl } from "./constants";
-import { Patient, Gender } from "./types";
+import { Patient } from "./types";
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
 import { PatientDetails } from "./components/PatientDetails";
 
-const initialPatient = {
-  id: "",
-  name: "",
-  occupation: "",
-  gender: Gender.Other,
-  ssn: "",
-  dateOfBirth: "",
-  entries: [],
-};
-
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [showPatient, setShowPatient] = useState<Patient>(initialPatient);
+  const [showPatient, setShowPatient] = useState<Patient | null>(null);
 
   useEffect(() => {
     void axios.get<String>(`${apiBaseUrl}/ping`);
@@ -34,6 +24,7 @@ const App = () => {
   }, []);
 
   const getOnePatient = async (id: string) => {
+    setShowPatient(null);
     const patient = await patientService.getOne(id);
     setShowPatient(patient);
   };
