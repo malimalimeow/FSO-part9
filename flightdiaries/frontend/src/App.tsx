@@ -21,16 +21,17 @@ const App = () => {
         setDiaries(allDiaries);
         setMessage({ message: "All dairies loaded", isError: false });
       } catch (error) {
+        let errorMsg = "something is going wrong.";
         if (axios.isAxiosError(error)) {
-          const errorResponse = error.response?.data;
-          console.log(error.status, errorResponse.error[0].message);
-          setMessage({
-            ...message,
-            message: `Error: ${errorResponse.error[0].message}`,
-          });
-        } else {
-          console.error(error);
+          const errorResponse = error.response?.data?.error?.[0]?.message;
+          if (errorResponse) {
+            errorMsg = errorResponse;
+          }
         }
+        setMessage({
+          message: `Error: ${errorMsg} `,
+          isError: true,
+        });
       }
     };
     getAllDiaries();
@@ -42,16 +43,17 @@ const App = () => {
       setDiaries((prev: Diary[]) => prev.concat(addedDiary));
       setMessage({ message: "Added a new diary", isError: false });
     } catch (error) {
+      let errorMsg = "something is going wrong.";
       if (axios.isAxiosError(error)) {
-        const errorResponse = error.response?.data;
-        console.log(error.status, errorResponse.error[0].message);
-        setMessage({
-          ...message,
-          message: `Error: ${errorResponse.error[0].message}`,
-        });
-      } else {
-        console.error(error);
+        const errorResponse = error.response?.data?.error?.[0]?.message;
+        if (errorResponse) {
+          errorMsg = errorResponse;
+        }
       }
+      setMessage({
+        message: `Error: ${errorMsg} `,
+        isError: true,
+      });
     }
   };
 
@@ -60,7 +62,7 @@ const App = () => {
       <h1>Add new dairy</h1>
       <Notification message={message} setMessage={setMessage} />
       <AddDiary addDiary={addDiary} />
-      <h1>Flight Diaries</h1>
+      {diaries.length !== 0 && <h1>Flight Diaries</h1>}
       <AllDiaries diaries={diaries} />
     </div>
   );

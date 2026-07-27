@@ -6,12 +6,13 @@ interface NotiProps {
   message: Message;
   setMessage: React.Dispatch<React.SetStateAction<Message>>;
 }
-export const Notification = ({ message, setMessage }: NotiProps) => {
-  const initialMessage = {
-    message: "",
-    isError: true,
-  };
 
+const initialMessage = {
+  message: "",
+  isError: true,
+};
+
+export const Notification = ({ message, setMessage }: NotiProps) => {
   useEffect(() => {
     if (message === initialMessage) {
       return;
@@ -32,7 +33,7 @@ export const Notification = ({ message, setMessage }: NotiProps) => {
     <div>
       <p
         style={{ marginTop: 10, marginBottom: 10 }}
-        className={message.isError ? "error" : "success"}
+        className={message.isError === true ? "error" : "success"}
       >
         {message.message}
       </p>

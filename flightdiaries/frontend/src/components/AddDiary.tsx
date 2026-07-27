@@ -1,4 +1,4 @@
-import type { DiaryFormValues, Message } from "../type";
+import type { DiaryFormValues } from "../type";
 import { Weather, Visibility } from "../type";
 import { useState } from "react";
 
@@ -7,16 +7,18 @@ interface AddDiaryProps {
 }
 export const AddDiary = ({ addDiary }: AddDiaryProps) => {
   const [date, setDate] = useState<string>("");
-  const [weather, setWeather] = useState<Weather>(Weather.Sunny);
-  const [visibility, setVisibility] = useState<Visibility>(Visibility.Good);
+  const [weather, setWeather] = useState<Weather | undefined>(undefined);
+  const [visibility, setVisibility] = useState<Visibility | undefined>(
+    undefined,
+  );
   const [comment, setComment] = useState<string>("");
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const newDiary = {
       date: date,
-      weather: weather,
-      visibility: visibility,
+      weather: weather as Weather,
+      visibility: visibility as Visibility,
       comment: comment,
     };
 
@@ -44,32 +46,42 @@ export const AddDiary = ({ addDiary }: AddDiaryProps) => {
 
         <div>
           <label>weather:</label>
-          <select
-            name="weather"
-            id="weather"
-            onChange={(e) => setWeather(e.target.value as Weather)}
-          >
+
+          <fieldset>
             {Object.values(Weather).map((w) => (
-              <option key={w} value={w}>
-                {w}
-              </option>
+              <span key={w}>
+                <input
+                  type="radio"
+                  id={w}
+                  name="weather"
+                  value={w}
+                  onChange={(e) => setWeather(e.target.value as Weather)}
+                  required
+                />
+                <label>{w}</label>
+              </span>
             ))}
-          </select>
+          </fieldset>
         </div>
 
         <div>
-          <label>visibility:</label>
-          <select
-            name="visibility"
-            id="visibility"
-            onChange={(e) => setVisibility(e.target.value as Visibility)}
-          >
+          <label>Visibility:</label>
+
+          <fieldset>
             {Object.values(Visibility).map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
+              <span key={v}>
+                <input
+                  type="radio"
+                  id={v}
+                  name="visibility"
+                  value={v}
+                  onChange={(e) => setVisibility(e.target.value as Visibility)}
+                  required
+                />
+                <label>{v}</label>
+              </span>
             ))}
-          </select>
+          </fieldset>
         </div>
 
         <div>
