@@ -1,0 +1,11 @@
+error {
+    border-color: red;
+    border-radius: 10px;
+    border-style: dotted;
+}
+
+success {
+    border-color: green;
+    border-radius: 10px;
+    border-style: dotted;
+}

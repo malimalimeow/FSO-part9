@@ -12,7 +12,7 @@ const getNonSensitiveEntries = (): NonSensitiveDiaryEntry[] => {
     id,    
     date,
     weather,
-    visibility,
+    visibility
   }));
 };
 
