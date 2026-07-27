@@ -16,6 +16,11 @@ return patients.map(({id,name,dateOfBirth,gender,occupation})=>(({id,name,dateOf
     
 ));};
 
+const getOne=(id:string):Patient[]=>{
+    const patient=patients.filter((p)=>p.id===id)
+    return patient
+}
+
 const addData=(data:NewPatient):Patient=>{
     const id = uuid();
     const newPatient:Patient= {id,...data};
@@ -24,5 +29,5 @@ const addData=(data:NewPatient):Patient=>{
 };
 
 export default{
-    addData,getNonSensitiveData
+    addData,getNonSensitiveData,getOne
 };

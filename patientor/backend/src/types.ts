@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import type { NewPatientSchema } from "./utils.ts";
+import type { NewPatientSchema, PatientSchema } from "./utils.ts";
 export interface Diagnosis {
     code:string;
     name:string;
@@ -7,7 +7,7 @@ export interface Diagnosis {
 }
 
 
-export type NonSensitivePatient = Omit<Patient, 'ssn'>;
+export type NonSensitivePatient = Omit<Patient, 'ssn'|'entries'>;
 
 export const Gender ={ male:'male',female:'female',other:'other'}as const;
 
@@ -15,4 +15,4 @@ export type Gender = typeof Gender[keyof typeof Gender];
 
 export type NewPatient =z.infer<typeof NewPatientSchema>;
 
-export interface Patient extends NewPatient{ id:string }
+export type Patient=z.infer<typeof PatientSchema>
