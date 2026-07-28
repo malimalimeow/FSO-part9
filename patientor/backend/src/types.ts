@@ -15,4 +15,4 @@ export type Gender = typeof Gender[keyof typeof Gender];
 
 export type NewPatient =z.infer<typeof NewPatientSchema>;
 
-export type Patient=z.infer<typeof PatientSchema>
+export type Patient=z.infer<typeof PatientSchema>;

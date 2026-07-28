@@ -12,14 +12,14 @@ export const NewPatientSchema= z.object({
         entries:z.array(z.unknown()).default([])
        });
 
-export const PatientSchema= NewPatientSchema.extend({ id:z.string() })
+export const PatientSchema= NewPatientSchema.extend({ id:z.string() });
 
 
  export const parseNewPatient = (object:unknown):NewPatient=>{
    return NewPatientSchema.parse(object);};
 
   export const parseOnePatient =(object:unknown):Patient=>{
-    return PatientSchema.parse(object)
-  }
+    return PatientSchema.parse(object);
+  };
 
 

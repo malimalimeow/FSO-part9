@@ -48,7 +48,6 @@ const App = () => {
                   patients={patients}
                   setPatients={setPatients}
                   getOnePatient={getOnePatient}
-                  setShowPatient={setShowPatient}
                 />
               }
             />

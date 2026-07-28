@@ -17,9 +17,9 @@ return patients.map(({id,name,dateOfBirth,gender,occupation})=>(({id,name,dateOf
 ));};
 
 const getOne=(id:string):Patient[]=>{
-    const patient=patients.filter((p)=>p.id===id)
-    return patient
-}
+    const patient=patients.filter((p)=>p.id===id);
+    return patient;
+};
 
 const addData=(data:NewPatient):Patient=>{
     const id = uuid();
