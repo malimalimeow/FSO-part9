@@ -3,6 +3,10 @@ import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import "../patientDetail.css";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
+import EmergencyIcon from "@mui/icons-material/Emergency";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 //helper function
 const assertNever = (value: never): never => {
@@ -18,11 +22,49 @@ interface PatientDetailProps {
 export const EntryDetails = ({ entry }: { entry: Entry }) => {
   switch (entry.type) {
     case "HealthCheck":
-      return; //icon-checkTmr
+      const color =
+        entry.healthCheckRating === 0
+          ? "#2E7D32"
+          : entry.healthCheckRating === 1
+            ? "#ED6C02"
+            : entry.healthCheckRating === 2
+              ? "#D32F2F"
+              : "#C62828";
+      return (
+        <div className="entryContainer">
+          <p>
+            {entry.date}
+            <MedicalInformationIcon />
+          </p>
+          <p>{entry.description}</p>
+          <FavoriteIcon sx={{ color: color }} />
+          <p>Diagnosed by {entry.specialist}</p>
+        </div>
+      );
     case "Hospital":
-      return; //icon-checkTmr
+      return (
+        <div className="entryContainer">
+          <p>
+            {entry.date} <LocalHospitalIcon />
+          </p>
+          <p>{entry.description}</p>
+          <p>Diagnosed by {entry.specialist}</p>
+        </div>
+      );
+
     case "OccupationalHealthcare":
-      return; //icon-checkTmr
+      return (
+        <div className="entryContainer">
+          <p>
+            {entry.date}
+            <EmergencyIcon />
+            {entry.employerName}
+          </p>
+          <p>{entry.description}</p>
+          <p>Diagnosed by {entry.specialist}</p>
+        </div>
+      );
+
     default:
       return assertNever(entry);
   }
@@ -56,18 +98,8 @@ export const PatientDetails = ({
 
       {showPatient && <h3>Entries</h3>}
       {showPatient?.entries?.map((entry) => (
-        <div key={entry.id} className="entryContainer">
-          <p>
-            {entry.date} <EntryDetails entry={entry} />
-          </p>
-          <p>{entry.description}</p>
-          <ul>
-            {entry?.diagnosisCodes?.map((e) => (
-              <li key={e}>
-                {e} {diagnoses?.find((d) => d.code === e)?.name}
-              </li>
-            ))}
-          </ul>
+        <div key={entry.id}>
+          <EntryDetails entry={entry} />
         </div>
       ))}
     </div>
