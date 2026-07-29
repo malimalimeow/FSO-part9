@@ -14,6 +14,15 @@ export const NewPatientSchema= z.object({
 
 export const PatientSchema= NewPatientSchema.extend({ id:z.string() });
 
+export const EntrySchema =z.object({
+  
+  id: z.string(),
+  description: z.string(),
+  date:z.string(),
+  specialist: z.string(),
+  diagnosisCodes: z.array(z.string()).optional()
+})
+
 
  export const parseNewPatient = (object:unknown):NewPatient=>{
    return NewPatientSchema.parse(object);};
