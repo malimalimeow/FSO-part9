@@ -64,7 +64,7 @@ export type Entry =
 type UnionOmit<T,K extends string|number|symbol>=T extends unknown ? Omit<T,K>:never
 //kinda like a function here T=>type, K=>key, in string/number/symbol(constraint)= (Ternary)when a type extends something? type omit that key 
 
-type EntryWithoutId= UnionOmit<Entry,"id">
+export type EntryFormValues= UnionOmit<Entry,"id">
 
 export interface Patient {
   id: string;

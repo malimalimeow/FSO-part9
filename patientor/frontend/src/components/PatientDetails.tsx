@@ -102,6 +102,8 @@ export const PatientDetails = ({
           <EntryDetails entry={entry} />
         </div>
       ))}
+
+      <button></button>
     </div>
   );
 };
