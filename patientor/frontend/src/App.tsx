@@ -7,13 +7,13 @@ import { apiBaseUrl } from "./constants";
 import { Diagnosis, Patient } from "./types";
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
-import { PatientDetails } from "./components/PatientDetails";
+import PatientDetails from "./components/PatientDetails";
 import diagnosesService from "./services/diagnosesService";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [showPatient, setShowPatient] = useState<Patient | null>(null);
-  const [diagnoses, setDiagnoses] = useState<Diagnosis | null>(null);
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[] | null>(null);
 
   useEffect(() => {
     void axios.get<String>(`${apiBaseUrl}/ping`);

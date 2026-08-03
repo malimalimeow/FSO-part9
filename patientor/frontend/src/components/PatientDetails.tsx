@@ -7,16 +7,14 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
 import EmergencyIcon from "@mui/icons-material/Emergency";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { assertNever } from "../helper";
+import { useState } from "react";
+import NewEntry from "./NewEntry";
+import { Button } from "@mui/material";
 
-//helper function
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`,
-  );
-};
 interface PatientDetailProps {
   showPatient: Patient | null;
-  diagnoses: Diagnosis[] | null;
+  diagnoses: Diagnosis[];
 }
 
 export const EntryDetails = ({ entry }: { entry: Entry }) => {
@@ -70,10 +68,7 @@ export const EntryDetails = ({ entry }: { entry: Entry }) => {
   }
 };
 
-export const PatientDetails = ({
-  showPatient,
-  diagnoses,
-}: PatientDetailProps) => {
+const PatientDetails = ({ showPatient, diagnoses }: PatientDetailProps) => {
   if (!showPatient) {
     return <p>Loading Patient Data...</p>;
   }
@@ -84,8 +79,7 @@ export const PatientDetails = ({
         ? MaleIcon
         : TransgenderIcon;
 
-  console.log(diagnoses);
-
+  const [showModal, setShowModal] = useState<Boolean>(false);
   return (
     <div>
       <h2>
@@ -103,7 +97,12 @@ export const PatientDetails = ({
         </div>
       ))}
 
-      <button></button>
+      <Button onClick={() => setShowModal(true)}>Add New Entry</Button>
+      {showModal && (
+        <NewEntry setShowModal={setShowModal} diagnoses={diagnoses} />
+      )}
     </div>
   );
 };
+
+export default PatientDetails;

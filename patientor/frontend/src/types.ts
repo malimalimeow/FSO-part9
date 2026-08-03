@@ -39,7 +39,7 @@ interface HospitalEntry extends BaseEntry {
     type: "Hospital";
     discharge:Discharge
 }
-interface Discharge{
+export interface Discharge{
     date:string
     criteria:string
 }
@@ -50,7 +50,7 @@ interface OccupationalHealthcareEntry extends BaseEntry {
     sickLeave?:SickLeave
 }
 
-interface SickLeave {
+export interface SickLeave {
     startDate: string
     endDate: string
 }
@@ -77,3 +77,11 @@ export interface Patient {
 }
 
 export type PatientFormValues = Omit<Patient, "id">;
+
+export const EntryType = {
+  Hospital: "Hospital",
+  OccupationalHealthcare: "OccupationalHealthcare",
+  HealthCheck: "HealthCheck",
+} as const;
+
+export type EntryTypes = (typeof EntryType)[keyof typeof EntryType];
