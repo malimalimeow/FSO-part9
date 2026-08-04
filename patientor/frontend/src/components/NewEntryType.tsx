@@ -1,26 +1,116 @@
-import type { EntryTypes } from "../types";
+import type { EntryTypes, Discharge, SickLeave } from "../types";
 import { assertNever } from "../helper";
+import { TextField, MenuItem } from "@mui/material";
+import { HealthCheckRatings } from "../types";
 
-const NewEntryType = ({ type }: { type: EntryTypes | null }) => {
+interface NewEntryTypeProps {
+  type: EntryTypes | null;
+  setRating: React.Dispatch<React.SetStateAction<number>>;
+  setDischarge: React.Dispatch<React.SetStateAction<Discharge>>;
+  setEmployerName: React.Dispatch<React.SetStateAction<string>>;
+  setSickLeave: React.Dispatch<React.SetStateAction<SickLeave>>;
+  rating: number;
+  discharge: Discharge;
+  employerName: string;
+  sickLeave: SickLeave;
+}
+const NewEntryType = ({
+  type,
+  setRating,
+  setDischarge,
+  setEmployerName,
+  setSickLeave,
+  rating,
+  discharge,
+  employerName,
+  sickLeave,
+}: NewEntryTypeProps) => {
   if (type != null) {
     switch (type) {
       case "HealthCheck":
         return (
           <>
-            <p>HealthCheck</p>
+            <TextField
+              select
+              fullWidth
+              label="HealthCheckRating"
+              id="HealthCheckRating"
+              value={rating}
+              required
+              onChange={({ target }) => setRating(Number(target.value))}
+            >
+              {Object.entries(HealthCheckRatings).map((key, value) => (
+                <MenuItem key={value} value={value}>
+                  {value}-{key}
+                </MenuItem>
+              ))}
+            </TextField>
           </>
         );
+
       case "Hospital":
         return (
           <>
-            <p>Hospital</p>
+            <p>Discharge</p>
+            <TextField
+              slotProps={{ inputLabel: { shrink: true } }}
+              label="Discharge Date"
+              value={discharge.date}
+              id="dischargeDate"
+              type="date"
+              required
+              onChange={({ target }) => {
+                setDischarge((prev) => ({ ...prev, date: target.value }));
+              }}
+            ></TextField>
+
+            <TextField
+              label="criteria"
+              value={discharge.criteria}
+              id="dischargeCriteria"
+              type="text"
+              required
+              onChange={({ target }) => {
+                setDischarge((prev) => ({ ...prev, criteria: target.value }));
+              }}
+            ></TextField>
           </>
         );
 
       case "OccupationalHealthcare":
         return (
           <>
-            <p>OccupationalHealthcare</p>
+            <TextField
+              label="employerName"
+              value={employerName}
+              id="employerName"
+              type="text"
+              required
+              onChange={({ target }) => setEmployerName(target.value)}
+            ></TextField>
+
+            <p>Sick Leave</p>
+            <TextField
+              slotProps={{ inputLabel: { shrink: true } }}
+              label="Start Date"
+              value={sickLeave.startDate}
+              id="startDate"
+              type="date"
+              onChange={({ target }) => {
+                setSickLeave((prev) => ({ ...prev, startDate: target.value }));
+              }}
+            ></TextField>
+
+            <TextField
+              slotProps={{ inputLabel: { shrink: true } }}
+              label="End Date"
+              value={sickLeave.endDate}
+              id="endDate"
+              type="date"
+              onChange={({ target }) => {
+                setSickLeave((prev) => ({ ...prev, endDate: target.value }));
+              }}
+            ></TextField>
           </>
         );
 

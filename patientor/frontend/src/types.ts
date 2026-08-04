@@ -13,14 +13,14 @@ export const Gender = {
 export type Gender = typeof Gender[keyof typeof Gender];
 
 
-const HealthCheckRating = {
+export const HealthCheckRatings = {
   Healthy: 0,
   LowRisk: 1,
   HighRisk: 2,
   CriticalRisk: 3,
 } as const;
 
-type HealthCheckRating = typeof HealthCheckRating[keyof typeof HealthCheckRating];
+export type HealthCheckRating = typeof HealthCheckRatings[keyof typeof HealthCheckRatings];
 
 
 interface BaseEntry {

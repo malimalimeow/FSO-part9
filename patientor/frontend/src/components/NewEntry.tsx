@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { ReactEventHandler, useState } from "react";
 import type { Discharge, SickLeave, Diagnosis, EntryTypes } from "../types";
 import { EntryType } from "../types";
 import NewEntryType from "./NewEntryType";
@@ -10,6 +10,7 @@ import {
   Select,
   SelectChangeEvent,
   FormControl,
+  Button,
 } from "@mui/material";
 
 interface NewEntryProps {
@@ -23,7 +24,7 @@ const NewEntry = ({ diagnoses, setShowModal }: NewEntryProps) => {
   const [specialist, setSpecialist] = useState<string>("");
   const [code, setCode] = useState<string[]>([]);
   const [type, setType] = useState<EntryTypes>("Hospital");
-  const [healthCheckRating, setHealthCheckRating] = useState<number>(0);
+  const [rating, setRating] = useState<number>(0);
   const [discharge, setDischarge] = useState<Discharge>({
     date: "",
     criteria: "",
@@ -34,16 +35,16 @@ const NewEntry = ({ diagnoses, setShowModal }: NewEntryProps) => {
     endDate: "",
   });
 
-  const handleCreate = (e: any) => {
-    e.prevent.default();
-    console.log(e.target.value);
-  };
-
   const handleCodeChange = (event: SelectChangeEvent<typeof code>) => {
     const {
       target: { value },
     } = event;
     setCode(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const handleCreate = (e: React.SubmitEvent) => {
+    e.preventDefault();
+    console.log(date, description, specialist, code, type);
   };
 
   return (
@@ -105,7 +106,19 @@ const NewEntry = ({ diagnoses, setShowModal }: NewEntryProps) => {
           </Select>
         </FormControl>
 
-        {type !== null && <NewEntryType type={type} />}
+        <NewEntryType
+          type={type}
+          rating={rating}
+          discharge={discharge}
+          employerName={employerName}
+          sickLeave={sickLeave}
+          setRating={setRating}
+          setDischarge={setDischarge}
+          setEmployerName={setEmployerName}
+          setSickLeave={setSickLeave}
+        />
+
+        <Button type="submit">Save Entry</Button>
       </form>
     </div>
   );
