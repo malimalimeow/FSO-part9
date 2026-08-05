@@ -31,6 +31,8 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
+export type BaseEntryForm = Omit<BaseEntry, "id">;
+
 interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;}
@@ -44,11 +46,13 @@ export interface Discharge{
     criteria:string
 }
 
-interface OccupationalHealthcareEntry extends BaseEntry {
+export interface OccupationalHealthcareEntry extends BaseEntry {
     type: "OccupationalHealthcare"
     employerName :string
     sickLeave?:SickLeave
 }
+
+export type OccupationalForm =Omit<OccupationalHealthcareEntry,"id">
 
 export interface SickLeave {
     startDate: string

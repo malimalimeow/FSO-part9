@@ -63,6 +63,7 @@ const App = () => {
               path="/api/patients/:id"
               element={
                 <PatientDetails
+                  setPatients={setPatients}
                   showPatient={showPatient}
                   diagnoses={diagnoses}
                 />

@@ -35,6 +35,9 @@ const addEntry=(id:string,data:NewEntry):Entry=>{
     if(!patient){
         throw new Error (`can't find user${id}`);
     }
+    if (!patient.entries) {
+  patient.entries = [];
+}
     patient.entries.push(newEntry);
     console.log(patient);
     return newEntry;  

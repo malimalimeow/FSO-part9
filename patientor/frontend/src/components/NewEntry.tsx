@@ -1,5 +1,14 @@
-import React, { ReactEventHandler, useState } from "react";
-import type { Discharge, SickLeave, Diagnosis, EntryTypes } from "../types";
+import React, { useState } from "react";
+import type {
+  Discharge,
+  SickLeave,
+  Diagnosis,
+  EntryTypes,
+  EntryFormValues,
+  HealthCheckRating,
+  BaseEntryForm,
+  OccupationalForm,
+} from "../types";
 import { EntryType } from "../types";
 import NewEntryType from "./NewEntryType";
 
@@ -15,16 +24,23 @@ import {
 
 interface NewEntryProps {
   diagnoses: Diagnosis[];
-  setShowModal: React.Dispatch<React.SetStateAction<Boolean>>;
+  onCancel: () => void;
+  onSubmit: (id: string, values: EntryFormValues) => void;
+  patientId: string;
 }
 
-const NewEntry = ({ diagnoses, setShowModal }: NewEntryProps) => {
+const NewEntry = ({
+  diagnoses,
+  onCancel,
+  onSubmit,
+  patientId,
+}: NewEntryProps) => {
   const [date, setDate] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [specialist, setSpecialist] = useState<string>("");
   const [code, setCode] = useState<string[]>([]);
   const [type, setType] = useState<EntryTypes>("Hospital");
-  const [rating, setRating] = useState<number>(0);
+  const [rating, setRating] = useState<HealthCheckRating>(0);
   const [discharge, setDischarge] = useState<Discharge>({
     date: "",
     criteria: "",
@@ -35,6 +51,18 @@ const NewEntry = ({ diagnoses, setShowModal }: NewEntryProps) => {
     endDate: "",
   });
 
+  console.log(
+    date,
+    description,
+    specialist,
+    code,
+    type,
+    rating,
+    discharge,
+    employerName,
+    sickLeave,
+  );
+
   const handleCodeChange = (event: SelectChangeEvent<typeof code>) => {
     const {
       target: { value },
@@ -42,9 +70,42 @@ const NewEntry = ({ diagnoses, setShowModal }: NewEntryProps) => {
     setCode(typeof value === "string" ? value.split(",") : value);
   };
 
-  const handleCreate = (e: React.SubmitEvent) => {
+  const handleCreate = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    console.log(date, description, specialist, code, type);
+    let basicPack: BaseEntryForm = {
+      description: description,
+      date: date,
+      specialist: specialist,
+    };
+    if (code.length !== 0) {
+      basicPack = { ...basicPack, diagnosisCodes: code };
+    }
+
+    if (type === "Hospital") {
+      onSubmit(patientId, {
+        ...basicPack,
+        type: "Hospital",
+        discharge: discharge,
+      });
+    } else if (type === "HealthCheck") {
+      onSubmit(patientId, {
+        ...basicPack,
+        type: "HealthCheck",
+        healthCheckRating: rating,
+      });
+    } else if (type === "OccupationalHealthcare") {
+      let OccupationalPack: OccupationalForm = {
+        ...basicPack,
+        type: "OccupationalHealthcare",
+        employerName: employerName,
+      };
+
+      if (sickLeave.startDate !== "" && sickLeave.endDate !== "") {
+        OccupationalPack = { ...OccupationalPack, sickLeave: sickLeave };
+      }
+
+      onSubmit(patientId, OccupationalPack);
+    }
   };
 
   return (

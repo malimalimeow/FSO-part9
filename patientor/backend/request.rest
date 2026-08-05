@@ -11,7 +11,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/api/patients/d2773336-f723-11e9-8f0b-362b9e155667
+GET http://localhost:3000/api/patients
 ###
 
 
