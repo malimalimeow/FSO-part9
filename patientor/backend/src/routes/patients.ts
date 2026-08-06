@@ -32,7 +32,7 @@ patientRouter.get("/:id",(req,res,next)=>{
   try{
   const patient= patientService.getOne(req.params.id);
   const parsedPatient= PatientSchema.parse(patient[0]);
-  console.log("Get",patient)
+  console.log("Get",patient);
   res.json(parsedPatient);
   }catch(error:unknown){
     next(error);
@@ -42,7 +42,7 @@ patientRouter.get("/:id",(req,res,next)=>{
 
 patientRouter.post("/", newPatientParser,(req:Request<unknown,unknown,NewPatient>,res:Response<Patient>)=>{
     const response =patientService.addData(req.body);
-    console.log("add someone,response:",response,"body:",req.body)
+    console.log("add someone,response:",response,"body:",req.body);
     res.json(response);
     
 });

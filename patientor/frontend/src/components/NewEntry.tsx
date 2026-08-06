@@ -20,6 +20,7 @@ import {
   SelectChangeEvent,
   FormControl,
   Button,
+  Chip,
 } from "@mui/material";
 
 interface NewEntryProps {
@@ -112,61 +113,84 @@ const NewEntry = ({
   return (
     <div>
       <form onSubmit={handleCreate}>
-        <TextField
-          select
-          fullWidth
-          label="type"
-          id="type"
-          value={type}
-          required
-          onChange={({ target }) => setType(target.value as EntryTypes)}
-        >
-          {Object.values(EntryType).map((e) => (
-            <MenuItem key={e} value={e}>
-              {e}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <TextField
-          value={date}
-          type="date"
-          required
-          onChange={({ target }) => setDate(target.value)}
-        />
-
-        <TextField
-          label="Description"
-          value={description}
-          required
-          onChange={({ target }) => setDescription(target.value)}
-        />
-
-        <TextField
-          label="Specialist"
-          value={specialist}
-          required
-          onChange={({ target }) => setSpecialist(target.value)}
-        />
-
-        <FormControl fullWidth>
-          <InputLabel id="code-label">Diagnoses code</InputLabel>
-          <Select
-            labelId="code-label"
-            id="code"
-            multiple
-            value={code}
+        <div>
+          <TextField
+            select
+            fullWidth
+            label="type"
+            id="type"
+            value={type}
             required
-            onChange={handleCodeChange}
-            renderValue={(selected) => selected.join(", ")}
+            onChange={({ target }) => setType(target.value as EntryTypes)}
           >
-            {diagnoses.map((d) => (
-              <MenuItem key={d.code} value={d.code}>
-                {d.code}-{d.name}
+            {Object.values(EntryType).map((e) => (
+              <MenuItem key={e} value={e}>
+                {e}
               </MenuItem>
             ))}
-          </Select>
-        </FormControl>
+          </TextField>
+        </div>
+
+        <div>
+          <TextField
+            label="Date"
+            slotProps={{ inputLabel: { shrink: true } }}
+            value={date}
+            type="date"
+            required
+            onChange={({ target }) => setDate(target.value)}
+          />
+        </div>
+
+        <div>
+          <TextField
+            label="Description"
+            value={description}
+            required
+            onChange={({ target }) => setDescription(target.value)}
+          />
+        </div>
+
+        <div>
+          <TextField
+            label="Specialist"
+            value={specialist}
+            required
+            onChange={({ target }) => setSpecialist(target.value)}
+          />
+        </div>
+
+        <div>
+          <FormControl fullWidth>
+            <InputLabel id="code-label">Diagnoses code</InputLabel>
+            <Select
+              labelId="code-label"
+              id="code"
+              multiple
+              value={code}
+              onChange={handleCodeChange}
+              renderValue={(selected) =>
+                selected.map((s) => (
+                  <Chip
+                    key={s}
+                    label={s}
+                    variant="outlined"
+                    onDelete={() => {
+                      setCode(code.filter((c) => c !== s));
+                    }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                  />
+                ))
+              }
+            >
+              {diagnoses.map((d) => (
+                <MenuItem key={d.code} value={d.code}>
+                  {d.code}-{d.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
 
         <NewEntryType
           type={type}
@@ -180,7 +204,7 @@ const NewEntry = ({
           setSickLeave={setSickLeave}
         />
 
-        <Button type="submit">Save Entry</Button>
+        <Button type="submit">Add</Button>
       </form>
     </div>
   );

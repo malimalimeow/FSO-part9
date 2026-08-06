@@ -14,7 +14,7 @@ import { PatientFormValues, Gender } from "../../types";
 
 interface Props {
   onCancel: () => void;
-  onSubmit: (values: PatientFormValues) => void;
+  onSubmit: (values: PatientFormValues) => Promise<void>;
 }
 
 interface GenderOption {
@@ -47,7 +47,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
 
   const addPatient = async (event: SyntheticEvent) => {
     event.preventDefault();
-    onSubmit({
+    await onSubmit({
       name,
       occupation,
       ssn,

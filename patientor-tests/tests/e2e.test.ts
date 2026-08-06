@@ -64,10 +64,14 @@ test.describe('Adding an entry to a patient', () => {
     await expect(page).toHaveURL(/\/patients\/.+/);
 
     await page.getByRole('button', { name: 'Add New Entry' }).click();
-
-    await page.getByLabel('Date').fill('2024-03-15');
+    await page.getByLabel('Type').click();
+    await page.getByRole("option",{name:"HealthCheck"}).click()
+    
+    await page.getByLabel('Date').pressSequentially('15/03/2024');
     await page.getByLabel('Description').fill('Annual checkup, all clear');
     await page.getByLabel('Specialist').fill('Dr. Test Specialist');
+    await page.getByLabel('rating').click();
+    await page.getByRole("option",{name:/0/}).click()
 
     await page.getByRole('button', { name: 'Add' }).click();
 

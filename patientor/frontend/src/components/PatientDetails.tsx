@@ -57,6 +57,9 @@ export const EntryDetails = ({ entry }: { entry: Entry }) => {
             {entry.date} <LocalHospitalIcon />
           </p>
           <p>{entry.description}</p>
+          <p>discharge:</p>
+          <p>{entry.discharge.date}</p>
+          <p>{entry.discharge.criteria}</p>
           <p>Diagnosed by {entry.specialist}</p>
         </div>
       );
@@ -99,7 +102,7 @@ const PatientDetails = ({
   };
 
   if (!showPatient) {
-    return <p>Loading Patient Data...</p>;
+    return <p>Loading</p>;
   }
   const GenderIcon =
     showPatient?.gender === "female"
@@ -121,6 +124,10 @@ const PatientDetails = ({
         };
       });
       setModalOpen(false);
+      setMessage({
+        message: `new Entry on ${newEntry.date} added`,
+        isError: false,
+      });
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         if (e?.response?.data && typeof e?.response?.data === "object") {

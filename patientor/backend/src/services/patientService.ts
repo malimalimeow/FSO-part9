@@ -3,7 +3,7 @@ import data from "../../data/patients.ts" with {type:"json"};
 import type { Entry,NewEntry,Patient, NonSensitivePatient, NewPatient } from "../types.ts";
 import { v1 as uuid } from 'uuid';
 
-let patients: Patient[]= data||[];
+const patients: Patient[]= data||[];
 
 
 //can take all the data, should not export to any file!!

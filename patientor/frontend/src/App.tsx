@@ -21,7 +21,10 @@ const App = () => {
   });
 
   useEffect(() => {
-    void axios.get<String>(`${apiBaseUrl}/ping`);
+    const ping = async () => {
+      await axios.get<String>(`${apiBaseUrl}/ping`);
+      console.log("Backend ready！");
+    };
 
     const fetchPatientList = async () => {
       const patients = await patientService.getAll();
@@ -31,6 +34,7 @@ const App = () => {
       const diagnoses = await diagnosesService.getAll();
       setDiagnoses(diagnoses);
     };
+    void ping();
     void fetchPatientList();
     void fetchDiagnoses();
   }, []);

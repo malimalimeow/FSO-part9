@@ -31,23 +31,25 @@ const NewEntryType = ({
       case "HealthCheck":
         return (
           <>
-            <TextField
-              select
-              fullWidth
-              label="HealthCheckRating"
-              id="HealthCheckRating"
-              value={rating}
-              required
-              onChange={({ target }) =>
-                setRating(Number(target.value) as HealthCheckRating)
-              }
-            >
-              {Object.entries(HealthCheckRatings).map((key, value) => (
-                <MenuItem key={value} value={value}>
-                  {value}-{key}
-                </MenuItem>
-              ))}
-            </TextField>
+            <div>
+              <TextField
+                select
+                fullWidth
+                label="HealthCheckRating"
+                id="HealthCheckRating"
+                value={rating}
+                required
+                onChange={({ target }) =>
+                  setRating(Number(target.value) as HealthCheckRating)
+                }
+              >
+                {Object.entries(HealthCheckRatings).map(([key, value]) => (
+                  <MenuItem key={value} value={value}>
+                    {value}-{key}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
           </>
         );
 
@@ -55,65 +57,76 @@ const NewEntryType = ({
         return (
           <>
             <p>Discharge</p>
-            <TextField
-              slotProps={{ inputLabel: { shrink: true } }}
-              label="Discharge Date"
-              value={discharge.date}
-              id="dischargeDate"
-              type="date"
-              required
-              onChange={({ target }) => {
-                setDischarge((prev) => ({ ...prev, date: target.value }));
-              }}
-            ></TextField>
+            <div>
+              <TextField
+                slotProps={{ inputLabel: { shrink: true } }}
+                label="Discharge Date"
+                value={discharge.date}
+                id="dischargeDate"
+                type="date"
+                required
+                onChange={({ target }) => {
+                  setDischarge((prev) => ({ ...prev, date: target.value }));
+                }}
+              ></TextField>
+            </div>
 
-            <TextField
-              label="criteria"
-              value={discharge.criteria}
-              id="dischargeCriteria"
-              type="text"
-              required
-              onChange={({ target }) => {
-                setDischarge((prev) => ({ ...prev, criteria: target.value }));
-              }}
-            ></TextField>
+            <div>
+              <TextField
+                label="criteria"
+                value={discharge.criteria}
+                id="dischargeCriteria"
+                type="text"
+                required
+                onChange={({ target }) => {
+                  setDischarge((prev) => ({ ...prev, criteria: target.value }));
+                }}
+              ></TextField>
+            </div>
           </>
         );
 
       case "OccupationalHealthcare":
         return (
           <>
-            <TextField
-              label="employerName"
-              value={employerName}
-              id="employerName"
-              type="text"
-              required
-              onChange={({ target }) => setEmployerName(target.value)}
-            ></TextField>
+            <div>
+              <TextField
+                label="employerName"
+                value={employerName}
+                id="employerName"
+                type="text"
+                required
+                onChange={({ target }) => setEmployerName(target.value)}
+              ></TextField>
+            </div>
 
             <p>Sick Leave</p>
-            <TextField
-              slotProps={{ inputLabel: { shrink: true } }}
-              label="Start Date"
-              value={sickLeave.startDate}
-              id="startDate"
-              type="date"
-              onChange={({ target }) => {
-                setSickLeave((prev) => ({ ...prev, startDate: target.value }));
-              }}
-            ></TextField>
+            <div>
+              <TextField
+                slotProps={{ inputLabel: { shrink: true } }}
+                label="Start Date"
+                value={sickLeave.startDate}
+                id="startDate"
+                type="date"
+                onChange={({ target }) => {
+                  setSickLeave((prev) => ({
+                    ...prev,
+                    startDate: target.value,
+                  }));
+                }}
+              ></TextField>
 
-            <TextField
-              slotProps={{ inputLabel: { shrink: true } }}
-              label="End Date"
-              value={sickLeave.endDate}
-              id="endDate"
-              type="date"
-              onChange={({ target }) => {
-                setSickLeave((prev) => ({ ...prev, endDate: target.value }));
-              }}
-            ></TextField>
+              <TextField
+                slotProps={{ inputLabel: { shrink: true } }}
+                label="End Date"
+                value={sickLeave.endDate}
+                id="endDate"
+                type="date"
+                onChange={({ target }) => {
+                  setSickLeave((prev) => ({ ...prev, endDate: target.value }));
+                }}
+              ></TextField>
+            </div>
           </>
         );
 

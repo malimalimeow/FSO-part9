@@ -49,8 +49,10 @@ const PatientListPage = ({
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
       const patient = await patientService.create(values);
+      console.log(values);
       setPatients(patients.concat(patient));
       setModalOpen(false);
+      setMessage({ message: `${patient.name} added`, isError: false });
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         if (e?.response?.data && typeof e?.response?.data === "object") {
