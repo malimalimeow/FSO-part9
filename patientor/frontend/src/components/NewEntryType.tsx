@@ -2,14 +2,15 @@ import type { EntryTypes, Discharge, SickLeave } from "../types";
 import { assertNever } from "../helper";
 import { TextField, MenuItem } from "@mui/material";
 import { HealthCheckRatings } from "../types";
+import type { HealthCheckRating } from "../types";
 
 interface NewEntryTypeProps {
   type: EntryTypes | null;
-  setRating: React.Dispatch<React.SetStateAction<number>>;
+  setRating: React.Dispatch<React.SetStateAction<HealthCheckRating>>;
   setDischarge: React.Dispatch<React.SetStateAction<Discharge>>;
   setEmployerName: React.Dispatch<React.SetStateAction<string>>;
   setSickLeave: React.Dispatch<React.SetStateAction<SickLeave>>;
-  rating: number;
+  rating: HealthCheckRating;
   discharge: Discharge;
   employerName: string;
   sickLeave: SickLeave;
@@ -37,7 +38,9 @@ const NewEntryType = ({
               id="HealthCheckRating"
               value={rating}
               required
-              onChange={({ target }) => setRating(Number(target.value))}
+              onChange={({ target }) =>
+                setRating(Number(target.value) as HealthCheckRating)
+              }
             >
               {Object.entries(HealthCheckRatings).map((key, value) => (
                 <MenuItem key={value} value={value}>

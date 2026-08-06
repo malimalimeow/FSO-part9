@@ -1,4 +1,10 @@
-import type { Patient, Diagnosis, Entry, EntryFormValues } from "../types";
+import type {
+  Patient,
+  Diagnosis,
+  Entry,
+  EntryFormValues,
+  message,
+} from "../types";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -17,7 +23,9 @@ import axios from "axios";
 interface PatientDetailProps {
   showPatient: Patient | null;
   diagnoses: Diagnosis[];
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
+  setShowPatient: React.Dispatch<React.SetStateAction<Patient | null>>;
+  setMessage: React.Dispatch<React.SetStateAction<message>>;
+  message: message;
 }
 
 export const EntryDetails = ({ entry }: { entry: Entry }) => {
@@ -74,16 +82,20 @@ export const EntryDetails = ({ entry }: { entry: Entry }) => {
 const PatientDetails = ({
   showPatient,
   diagnoses,
-  setPatients,
+  setShowPatient,
+  setMessage,
+  message,
 }: PatientDetailProps) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
 
   const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {
     setModalOpen(false);
-    setError(undefined);
+    setMessage({
+      message: "",
+      isError: true,
+    });
   };
 
   if (!showPatient) {
@@ -99,31 +111,34 @@ const PatientDetails = ({
   const submitNewEntry = async (id: string, values: EntryFormValues) => {
     try {
       const newEntry = await patientService.addEntry(id, values);
-      setPatients((prev) =>
-        prev.map((p) => {
-          if (p.id !== id) return p;
-          return {
-            ...p,
-            entries: p.entries ? [...p.entries, newEntry] : [newEntry],
-          };
-        }),
-      );
+      setShowPatient((prev) => {
+        if (!prev) {
+          return null;
+        }
+        return {
+          ...prev,
+          entries: prev.entries ? prev.entries.concat(newEntry) : [newEntry],
+        };
+      });
       setModalOpen(false);
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
-        if (e?.response?.data && typeof e?.response?.data === "string") {
-          const message = e.response.data.replace(
-            "Something went wrong. Error: ",
-            "",
-          );
-          console.error(message);
-          setError(message);
+        if (e?.response?.data && typeof e?.response?.data === "object") {
+          const firstError = e?.response?.data.error[0];
+          const message = `Something went wrong. Error: ${firstError?.message}`;
+          setMessage((prev) => {
+            return { ...prev, message: message };
+          });
         } else {
-          setError("Unrecognized axios error");
+          setMessage((prev) => {
+            return { ...prev, message: "Unrecognized axios error" };
+          });
         }
       } else {
         console.error("Unknown error", e);
-        setError("Unknown error");
+        setMessage((prev) => {
+          return { ...prev, message: "Unknown error" };
+        });
       }
     }
   };
@@ -146,9 +161,10 @@ const PatientDetails = ({
       ))}
 
       <AddEntryModal
+        setMessage={setMessage}
+        message={message}
         modalOpen={modalOpen}
         onSubmit={submitNewEntry}
-        error={error}
         onClose={closeModal}
         diagnoses={diagnoses}
         patientId={showPatient.id}

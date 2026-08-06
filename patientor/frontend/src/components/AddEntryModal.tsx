@@ -1,37 +1,34 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Divider,
-  Alert,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, Divider } from "@mui/material";
 
 import NewEntry from "./NewEntry";
 import { EntryFormValues } from "../types";
 import type { Diagnosis } from "../types";
+import Notification from "./notification";
 
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
   onSubmit: (id: string, values: EntryFormValues) => void;
-  error?: string;
   diagnoses: Diagnosis[];
   patientId: string;
+  setMessage: React.Dispatch<React.SetStateAction<message>>;
+  message: message;
 }
 
 const AddEntryModal = ({
   modalOpen,
   onClose,
   onSubmit,
-  error,
   diagnoses,
   patientId,
+  setMessage,
+  message,
 }: Props) => (
   <Dialog fullWidth={true} open={modalOpen} onClose={() => onClose()}>
     <DialogTitle>Add New Entry</DialogTitle>
     <Divider />
     <DialogContent>
-      {error && <Alert severity="error">{error}</Alert>}
+      <Notification message={message} setMessage={setMessage} />
       <NewEntry
         onSubmit={onSubmit}
         onCancel={onClose}

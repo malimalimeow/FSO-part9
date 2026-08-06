@@ -3,7 +3,7 @@ import data from "../../data/patients.ts" with {type:"json"};
 import type { Entry,NewEntry,Patient, NonSensitivePatient, NewPatient } from "../types.ts";
 import { v1 as uuid } from 'uuid';
 
-let patients: Patient[]= data;
+let patients: Patient[]= data||[];
 
 
 //can take all the data, should not export to any file!!
@@ -23,8 +23,8 @@ const getOne=(id:string):Patient[]=>{
 
 const addData=(data:NewPatient):Patient=>{
     const id = uuid();
-    const newPatient:Patient= {id,...data};
-    patients = patients.concat(newPatient);
+    const newPatient:Patient= {id,...data,entries:data.entries||[]};
+    patients.push(newPatient);
     return newPatient;
 };
 

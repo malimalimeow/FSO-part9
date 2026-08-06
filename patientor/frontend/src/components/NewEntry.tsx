@@ -105,6 +105,7 @@ const NewEntry = ({
       }
 
       onSubmit(patientId, OccupationalPack);
+      onCancel();
     }
   };
 

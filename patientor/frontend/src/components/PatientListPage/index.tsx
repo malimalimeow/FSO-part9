@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-import { PatientFormValues, Patient } from "../../types";
+import { PatientFormValues, Patient, message } from "../../types";
 import AddPatientModal from "../AddPatientModal";
 
 import HealthRatingBar from "../HealthRatingBar";
@@ -23,17 +23,27 @@ interface Props {
   patients: Patient[];
   setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
   getOnePatient: (id: string) => Promise<void>;
+  setMessage: React.Dispatch<React.SetStateAction<message>>;
+  message: message;
 }
 
-const PatientListPage = ({ patients, setPatients, getOnePatient }: Props) => {
+const PatientListPage = ({
+  patients,
+  setPatients,
+  getOnePatient,
+  setMessage,
+  message,
+}: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
 
   const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {
     setModalOpen(false);
-    setError(undefined);
+    setMessage({
+      message: "",
+      isError: true,
+    });
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {
@@ -43,19 +53,22 @@ const PatientListPage = ({ patients, setPatients, getOnePatient }: Props) => {
       setModalOpen(false);
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
-        if (e?.response?.data && typeof e?.response?.data === "string") {
-          const message = e.response.data.replace(
-            "Something went wrong. Error: ",
-            "",
-          );
-          console.error(message);
-          setError(message);
+        if (e?.response?.data && typeof e?.response?.data === "object") {
+          const firstError = e?.response?.data.error[0];
+          const message = `Something went wrong. Error: ${firstError?.message}`;
+          setMessage((prev) => {
+            return { ...prev, message: message };
+          });
         } else {
-          setError("Unrecognized axios error");
+          setMessage((prev) => {
+            return { ...prev, message: "Unrecognized axios error" };
+          });
         }
       } else {
         console.error("Unknown error", e);
-        setError("Unknown error");
+        setMessage((prev) => {
+          return { ...prev, message: "Unknown error" };
+        });
       }
     }
   };
@@ -85,7 +98,7 @@ const PatientListPage = ({ patients, setPatients, getOnePatient }: Props) => {
             <TableRow key={patient.id}>
               <TableCell>
                 <Link
-                  to={`/api/patients/${patient.id}`}
+                  to={`/patients/${patient.id}`}
                   onClick={() => findPatientData(patient.id)}
                 >
                   {patient.name}
@@ -103,7 +116,8 @@ const PatientListPage = ({ patients, setPatients, getOnePatient }: Props) => {
       <AddPatientModal
         modalOpen={modalOpen}
         onSubmit={submitNewPatient}
-        error={error}
+        setMessage={setMessage}
+        message={message}
         onClose={closeModal}
       />
       <Button variant="contained" onClick={() => openModal()}>

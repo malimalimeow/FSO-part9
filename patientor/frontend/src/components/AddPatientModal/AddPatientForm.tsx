@@ -28,11 +28,11 @@ const genderOptions: GenderOption[] = Object.values(Gender).map((v) => ({
 }));
 
 const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
-  const [name, setName] = useState("");
-  const [occupation, setOccupation] = useState("");
-  const [ssn, setSsn] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [gender, setGender] = useState(Gender.Other);
+  const [name, setName] = useState<string>("");
+  const [occupation, setOccupation] = useState<string>("");
+  const [ssn, setSsn] = useState<string>("");
+  const [dateOfBirth, setDateOfBirth] = useState<string>("");
+  const [gender, setGender] = useState<Gender>("female");
 
   const onGenderChange = (event: SelectChangeEvent<string>) => {
     event.preventDefault();
@@ -45,7 +45,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
     }
   };
 
-  const addPatient = (event: SyntheticEvent) => {
+  const addPatient = async (event: SyntheticEvent) => {
     event.preventDefault();
     onSubmit({
       name,

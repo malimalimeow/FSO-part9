@@ -89,3 +89,8 @@ export const EntryType = {
 } as const;
 
 export type EntryTypes = (typeof EntryType)[keyof typeof EntryType];
+
+export interface message {
+  message: string;
+  isError: boolean;
+}

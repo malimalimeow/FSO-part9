@@ -1,27 +1,29 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Divider,
-  Alert,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, Divider } from "@mui/material";
 
 import AddPatientForm from "./AddPatientForm";
-import { PatientFormValues } from "../../types";
+import { message, PatientFormValues } from "../../types";
+import Notification from "../notification";
 
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
   onSubmit: (values: PatientFormValues) => void;
-  error?: string;
+  message: message;
+  setMessage: React.Dispatch<React.SetStateAction<message>>;
 }
 
-const AddPatientModal = ({ modalOpen, onClose, onSubmit, error }: Props) => (
+const AddPatientModal = ({
+  modalOpen,
+  onClose,
+  onSubmit,
+  message,
+  setMessage,
+}: Props) => (
   <Dialog fullWidth={true} open={modalOpen} onClose={() => onClose()}>
     <DialogTitle>Add a new patient</DialogTitle>
     <Divider />
     <DialogContent>
-      {error && <Alert severity="error">{error}</Alert>}
+      <Notification message={message} setMessage={setMessage} />
       <AddPatientForm onSubmit={onSubmit} onCancel={onClose} />
     </DialogContent>
   </Dialog>

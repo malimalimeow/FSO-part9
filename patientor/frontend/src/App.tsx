@@ -4,16 +4,21 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Button, Divider, Container, Typography } from "@mui/material";
 
 import { apiBaseUrl } from "./constants";
-import { Diagnosis, Patient } from "./types";
+import { Diagnosis, Patient, message } from "./types";
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
 import PatientDetails from "./components/PatientDetails";
 import diagnosesService from "./services/diagnosesService";
+import Notification from "./components/notification";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [showPatient, setShowPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+  const [message, setMessage] = useState<message>({
+    message: "",
+    isError: true,
+  });
 
   useEffect(() => {
     void axios.get<String>(`${apiBaseUrl}/ping`);
@@ -47,11 +52,14 @@ const App = () => {
             Home
           </Button>
           <Divider sx={{ marginY: 2 }} />
+          <Notification message={message} setMessage={setMessage} />
           <Routes>
             <Route
               path="/"
               element={
                 <PatientListPage
+                  message={message}
+                  setMessage={setMessage}
                   patients={patients}
                   setPatients={setPatients}
                   getOnePatient={getOnePatient}
@@ -60,10 +68,12 @@ const App = () => {
             />
 
             <Route
-              path="/api/patients/:id"
+              path="/patients/:id"
               element={
                 <PatientDetails
-                  setPatients={setPatients}
+                  message={message}
+                  setMessage={setMessage}
+                  setShowPatient={setShowPatient}
                   showPatient={showPatient}
                   diagnoses={diagnoses}
                 />

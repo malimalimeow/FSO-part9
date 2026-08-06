@@ -32,6 +32,7 @@ patientRouter.get("/:id",(req,res,next)=>{
   try{
   const patient= patientService.getOne(req.params.id);
   const parsedPatient= PatientSchema.parse(patient[0]);
+  console.log("Get",patient)
   res.json(parsedPatient);
   }catch(error:unknown){
     next(error);
@@ -41,7 +42,9 @@ patientRouter.get("/:id",(req,res,next)=>{
 
 patientRouter.post("/", newPatientParser,(req:Request<unknown,unknown,NewPatient>,res:Response<Patient>)=>{
     const response =patientService.addData(req.body);
+    console.log("add someone,response:",response,"body:",req.body)
     res.json(response);
+    
 });
 
 patientRouter.post("/:id/entries", newEntryParser,(req:Request<{ id: string },unknown,NewEntry>,res:Response<Entry>)=>{
@@ -52,7 +55,7 @@ patientRouter.post("/:id/entries", newEntryParser,(req:Request<{ id: string },un
 
 const errorMiddleware = (error: unknown, _req: Request, res: Response, next: NextFunction) => { 
   if (error instanceof z.ZodError) {
-    res.status(400).send({ error: error.issues });
+    res.status(400).json({ error: error.issues });
   } else {
     next(error);
   }
