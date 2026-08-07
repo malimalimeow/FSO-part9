@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, DialogContent, Divider } from "@mui/material";
 
 import NewEntry from "./NewEntry";
 import { EntryFormValues } from "../types";
-import type { Diagnosis } from "../types";
+import type { Diagnosis, message } from "../types";
 import Notification from "./notification";
 
 interface Props {

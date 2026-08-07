@@ -7,7 +7,7 @@ import Notification from "../notification";
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: PatientFormValues) => void;
+  onSubmit: (values: PatientFormValues) => Promise<void>;
   message: message;
   setMessage: React.Dispatch<React.SetStateAction<message>>;
 }
